@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách sản phẩm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .product-list {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .product-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .product-detail {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .product-detail.hidden {
+            opacity: 0;
+        }
+
+        .product-detail.visible {
+            opacity: 1;
+        }
+
+        .product-detail h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Danh sách sản phẩm</h1>
+    <div class="container">
+        <div class="product-list">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...">
+            </div>
+            <ul id="productList"></ul>
+        </div>
+        <div class="product-detail visible" id="productDetail">
+            <p>Nhấp vào một sản phẩm để xem chi tiết.</p>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Áo thun nam",
+                description: "Áo thun cotton 100% thoáng mát, phù hợp mùa hè.",
+                price: "150,000đ",
+            },
+            {
+                id: 2,
+                name: "Quần jeans nữ",
+                description: "Quần jeans co giãn, tôn dáng, dễ phối đồ.",
+                price: "350,000đ",
+            },
+            {
+                id: 3,
+                name: "Giày thể thao",
+                description: "Giày thể thao năng động, phù hợp chạy bộ, tập gym.",
+                price: "550,000đ",
+            }
+        ];
+
+        const productList = document.getElementById('productList');
+        const productDetail = document.getElementById('productDetail');
+        const searchInput = document.getElementById('searchInput');
+
+        function renderProductList(filteredProducts) {
+            productList.innerHTML = '';
+            filteredProducts.forEach(product => {
+                const li = document.createElement('li');
+                li.textContent = product.name;
+                li.addEventListener('click', () => {
+                    showProductDetail(product);
+                });
+                productList.appendChild(li);
+            });
+        }
+
+        function showProductDetail(product) {
+            productDetail.classList.remove('visible');
+            productDetail.classList.add('hidden');
+            setTimeout(() => {
+                productDetail.innerHTML = `
+          <h2>${product.name}</h2>
+          <img src="${product.image}" alt="${product.name}" style="width: 100%; border-radius: 10px;">
+          <p><strong>Mô tả:</strong> ${product.description}</p>
+          <p><strong>Giá:</strong> ${product.price}</p>
+        `;
+                productDetail.classList.remove('hidden');
+                productDetail.classList.add('visible');
+            }, 200);
+        }
+
+        searchInput.addEventListener('input', () => {
+            const keyword = searchInput.value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+            renderProductList(filtered);
+        });
+
+        // Initial render
+        renderProductList(products);
+    </script>
+</body>
+
+</html>
